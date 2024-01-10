@@ -28,7 +28,7 @@ app.get("/api", function (req, res) {
 });
 app.get("/api/:date", function (req, res) {
     const { date } = req.params;
-    if (isNaN(Number(date)) && date.length === 13) {
+    if (!isNaN(Number(date))) {
         return res.json({
             unix: date,
             utc: new Date(Number(date)).toUTCString(),
