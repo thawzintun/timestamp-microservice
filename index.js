@@ -31,10 +31,16 @@ app.get("/api/:date", function (req, res) {
     const { date } = req.params;
     const dateFormat = date.split("");
     let convertDate;
+
     if (dateFormat.includes("-")) {
         convertDate = new Date(req.params.date);
     }
     convertDate = new Date(parseInt(req.params.date));
+    if (convertDate === null) {
+        res.json({
+            error: "Invalid Date",
+        });
+    }
     res.json({
         unix: convertDate.valueOf(),
         utc: convertDate.toUTCString(),
