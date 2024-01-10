@@ -21,29 +21,27 @@ app.get("/", function (req, res) {
 
 // your first API endpoint...
 app.get("/api", function (req, res) {
-    const date = new Date();
     res.json({
-        unix: date.valueOf(),
-        utc: date.toUTCString(),
+        unix: new Date().getTime(),
+        utc: new Date().toUTCString(),
     });
 });
 app.get("/api/:date", function (req, res) {
     const { date } = req.params;
-    const dateFormat = date.split("");
-    let convertDate;
-
-    if (dateFormat.includes("-")) {
-        convertDate = new Date(req.params.date);
+    if (isNaN(Number(date)) && date.length === 13) {
+        return res.json({
+            unix: date,
+            utc: new Date(Number(date)).toUTCString(),
+        });
     }
-    convertDate = new Date(parseInt(req.params.date));
-    if (convertDate === null) {
-        res.json({
-            error: "Invalid Date",
+    if (new Date(date).toUTCString() !== "Invalid Date") {
+        return res.json({
+            unix: new Date(date).getTime(),
+            utc: new Date(date).toUTCString(),
         });
     }
     res.json({
-        unix: convertDate.valueOf(),
-        utc: convertDate.toUTCString(),
+        error: "Invalid Date",
     });
 });
 
